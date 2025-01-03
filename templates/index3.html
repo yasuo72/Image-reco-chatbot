@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Recognition Chatbot</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        body {
+    background: url('../static/Radial Gradient Deep Blue Colour.jpeg') no-repeat center center fixed;
+    background-size: cover;
+    font-family: Arial, sans-serif;
+    /* cursor: url('/static/custom-cursor.png'), auto; */
+}
+        .chat-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            /* background-color: rgba(255, 255, 255, 0.18); */
+            background-color: lightgrey;
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            height: 80vh;
+        }
+        .chat-marquee {
+            background-color: rgba(255, 204, 0, 0.48);
+            color: #333;
+            padding: 5px 10px;
+            border-radius: 10px 10px 0 0;
+            font-size: 1rem;
+            font-weight: bold;
+            text-align: center;
+            overflow: hidden;
+            position: relative;
+        }
+        /* .chat-marquee span {
+            display: inline-block;
+            white-space: nowrap;
+            animation: marquee 10s linear infinite;
+        } */
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        .chat-header {
+            background-color: rgba(0, 123, 255);
+            color: rgba(255, 255, 255);
+            padding: 15px;
+            border-radius: 10px 10px 0 0;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .chatbox {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 15px;
+            border-radius: 10px;
+            /* background: rgba(86, 83, 83, 0.13); */
+            /* background: url('/static/chatbox-background.jpg') no-repeat center center fixed; */
+            background: url('../static/card-image.svg')no-repeat;
+            background-size: 560px 465px;
+            /* background-size:cover; */
+            font-family: Arial, sans-serif;
+            /* cursor: url('/static/custom-cursor.png'), auto; */
+            /* backdrop-filter: blur(10px); */
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+        }
+        .message {
+            margin: 10px 0;
+            display: flex;
+            align-items: flex-start;
+        }
+        .message.user .message-content {
+            background-color: rgba(0, 123, 255, 0.76);
+            color: rgba(255, 255, 255, 0.8);
+            align-self: flex-end;
+        }
+        .message.bot .message-content {
+            background-color: rgba(226, 227, 229, 0.76);
+            color: #1f1e1e;
+        }
+        .message-content {
+            padding: 10px 15px;
+            border-radius: 20px;
+            max-width: 75%;
+            word-break: break-word;
+        }
+        .message img {
+            max-width: 100%;
+            border-radius: 10px;
+            margin-top: 5px;
+        }
+        .form-group {
+            display: flex;
+            align-items: center;
+        }
+        .custom-file-upload {
+            flex-grow: 1;
+            padding: 10px;
+            cursor: pointer;
+            background-color: rgba(0, 123, 255, 0.79);
+            color: rgba(255, 255, 255, 0.42);
+            text-align: center;
+            border-radius: 15px;
+            margin-right: 5px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .custom-file-upload:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+        #image {
+            display: none;
+        }
+        .btn-submit {
+            padding: 10px 20px;
+            background-color: rgba(0, 123, 255, 0.89);
+            color: rgba(255, 255, 255, 0.77);
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-submit:hover {
+            background-color: rgba(0, 86, 179, 0.84);
+            transform: scale(1.05);
+        }
+        .btn-submit:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.47);
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            transition: transform 0.3s ease;
+        }
+        .btn-submit:hover:before {
+            transform: translate(-50%, -50%) scale(1);
+        }
+        .loader {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #1100ff;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+            display: none;
+        }
+        .bd-placeholder-img{
+            display: flex;
+            width: 100%;
+            height: 40%;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @media (max-width: 768px) {
+            .chat-header {
+                font-size: 1.2rem;
+            }
+            .btn-submit {
+                font-size: 1rem;
+                padding: 8px;
+            }
+            .custom-file-upload {
+                padding: 8px;
+            }
+        }
+
+        .cont{
+            display: flex;
+            justify-content: center;
+            height: 100vh;
+            align-items: center;
+        }
+
+        .container1{
+            display: grid;
+            width: 80%;
+            height: 75vh;
+            grid-template-rows:1fr 1fr;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .uno {
+    display: flex; /* This sets the display to flex */
+    /* If you are using grid, you might want to remove this line */
+    /* grid-area: 1/1/2/2; */ /* Uncomment if using grid layout */
+    background-image: url("../static/Gradient Wallpapers/on/WallpaperSafari.jpeg");
+    background-size: cover;
+    border-radius: 10px;
+    color: white;
+    flex-direction: column;
+    padding: 20px;
+}
+
+        .dos{
+            display: flex;
+            grid-area: 2/1/3/2;
+            background-image: url("../static/qbg.jpeg");
+            background-size: cover;
+            border-radius: 10px;
+            color: white;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .tres{
+            display: flex;
+            grid-area:1/2/3/3;
+            background-image: url("../static/Free\ Blue\ Blurry\ Background.jpeg");
+            background-size: cover;
+            color: white;
+            border-radius: 10px;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        <img src="../static/🔥 Gradient Wallpapers on WallpaperSafari.jpeg" height="236" width="420"/><img
+            src="../static/Radial Gradient Deep Blue Colour.jpeg" height="386" width="735"/><img
+            src="../static/Radial Gradient Deep Blue Colour.jpeg" height="386" width="735"/></style>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+</head>
+<body>
+<!--Code for the Navigation bar-->
+    <nav class="navbar bg-body-tertiary" style="border-bottom: 2px solid blue;">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#" style="color: #1100ff; font-weight: bold;">
+            <img src="../static/chat-square-dots.svg" alt="Logo" width="30" height="30" class="d-inline-block align-text-top">
+            Predictor's Bot
+          </a>
+        </div>
+      </nav>
+
+<!--       <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <img src="../static/chat-square-dots.svg" width="26px" height="26px">
+        <a class="navbar-brand" href="#">Predictor's Bot</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="navbar-nav">
+            <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
+            <a class="nav-item nav-link" href="#">About us</a>
+            <a class="nav-item nav-link" href="#">Contacts</a>
+          </div>
+        </div>
+      </nav>
+ -->
+
+
+
+
+<!--Code for the Centered Hero-->
+      <div class="px-4 py-5 my-5 text-center">
+        <!-- <img class="d-block mx-auto mb-4" src="/docs/5.3/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57"> -->
+        <!-- <h1 class="display-5 fw-bold text-body-emphasis text-white">Welcome to Predictor's Chatbot</h1> -->
+         <h1 style="font-size: 3rem; color: white; font-weight: bold;">Welcome to Predictor's Bot</h1>
+        <div class="col-lg-6 mx-auto">
+          <p class="lead mb-4" style="color: white; font-size: 2rem;">This chatbot is designed to understand and interact with images you provide. Simply upload an image, and it will analyze its content using advanced image recognition technology. The bot will then engage you in a dynamic conversation about the image, answering questions, offering insights, or even discussing related topics. It's your interactive companion, powered by AI to bring your visuals to life.</p>
+          <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+            <button type="button" class="btn btn-primary btn-lg px-4 gap-3">Primary button</button>
+            <button type="button" class="btn btn-outline-secondary btn-lg px-4" style="background-color: lightblue; color:black">Secondary</button>
+          </div>
+        </div>
+      </div>
+
+
+
+
+<!--Code for BOXES-->
+<div class="cont">
+    <div class="container1">
+        <div class="uno">
+            <h1>Feasibility:</h1>
+            <p style="font-size: 20px;">-Technology: Advances in AI enable robust image recognition and conversational abilities.<br>
+                -Integration: Harmonizing image processing with NLP is technically achievable.<br>
+                -Infrastructure: Modern cloud services support high computational needs and data storage.
+            </p>
+        </div>
+        <div class="dos">
+            <h1>Viability:</h1>
+            <p style="font-size: 20px;">Demand: Increasing interest in interactive AI tools drives market potential.<br>
+                Cost: Initial development may be expensive, but long-term maintenance can be economical.<br>
+                Scalability: Systems can expand to handle growing user bases and diverse image types.<br>
+                </p>
+        </div>
+        <div class="tres">
+            <h1>Our Idea</h1>
+            <p style="font-size: 18px; width: 75%;">A chatbot with image recognition ability is an AI system that combines visual analysis and conversational AI. Users provide images as input, and the chatbot uses image recognition (powered by models like ResNet50) to analyze the image, identify objects, scenes, or features, and extract relevant information.<br>
+                Once the image is processed, the chatbot holds a dynamic conversation based on the recognized content. It can answer questions about the image, provide insights, suggest related topics, or engage in a broader discussion. The bot uses natural language processing (NLP) to adapt its responses, making the interaction more interactive and contextually relevant, enhancing user experience by blending visual recognition with intelligent conversation.</p>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<!--ChatBot actual-->
+    <div class="chat-container">
+        <!-- <div class="chat-marquee">
+            <span>Under development...😉</span>
+        </div> -->
+        <div class="chat-header">
+            Predictor's Bot
+        </div>
+        <div class="chatbox" id="chatbox">
+        </div>
+
+        <form id="uploadForm" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="image" class="custom-file-upload">
+                    Choose Image
+                </label>
+                <input type="file" id="image" name="image" accept="image/*" required>
+                <button type="submit" class="btn-submit">Send</button>
+            </div>
+        </form>
+
+        <div class="loader" id="loader"></div>
+
+        <div class="form-group">
+            <textarea id="input" rows="3" style="width: 100%;" placeholder="Type a message..."></textarea>
+            <button id="send" class="btn-submit">Send</button>
+        </div>
+    </div>
+
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const chatbox = document.getElementById('chatbox');
+    const form = document.getElementById('uploadForm');
+    const loader = document.getElementById('loader');
+    const fileInput = document.getElementById('image');
+    const fileLabel = document.querySelector('.custom-file-upload');
+    const messagesList = document.getElementById('messages');
+
+    // Function to add a message to the chatbox
+    function addMessage(sender, content, isImage = false) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${sender}`;
+        const messageContent = document.createElement('div');
+        messageContent.className = 'message-content';
+
+        if (isImage) {
+            const img = document.createElement('img');
+            img.src = content;
+            messageContent.appendChild(img);
+        } else {
+            messageContent.textContent = content;
+        }
+
+        messageDiv.appendChild(messageContent);
+        chatbox.appendChild(messageDiv);
+        chatbox.scrollTop = chatbox.scrollHeight;  // Auto-scroll to the bottom
+    }
+
+    // Handle text message send
+    document.getElementById('send').addEventListener('click', function () {
+        const input = document.getElementById('input').value.trim();
+        if (input === '') return;
+
+        addMessage('user', `You: ${input}`);
+
+        fetch('/predict', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'  // Correct Content-Type
+            },
+            body: JSON.stringify({ message: input })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Response from server:', data);  // Debug print
+            if (data.answer) {
+                addMessage('bot', `Bot: ${data.answer}`);
+            } else {
+                addMessage('bot', 'Bot: Sorry, there was no response from the server.');
+            }
+            document.getElementById('input').value = '';  // Clear input field
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            addMessage('bot', 'Bot: Sorry, an error occurred while processing your request.');
+        });
+    });
+
+    // Handle image upload form submission
+    form.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const formData = new FormData(this);
+        loader.style.display = 'block';
+        addMessage('user', 'Uploading image...');
+
+        fetch('/upload', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            loader.style.display = 'none';
+
+            if (data.error) {
+                alert('Error: ' + data.error);
+            } else {
+                const imgUrl = URL.createObjectURL(fileInput.files[0]);
+                addMessage('user', imgUrl, true);
+                addMessage('bot', `Description: ${data.description}\nResponse: ${data.response}`);
+                fileInput.value = '';  // Clear file input
+                fileLabel.textContent = 'Choose Image';  // Reset the label
+            }
+        })
+        .catch(error => {
+            loader.style.display = 'none';
+            console.error('Error:', error);
+            alert('An error occurred. Please try again.');
+        });
+    });
+
+    // Update label text when a file is selected
+    fileInput.addEventListener('change', function () {
+        if (fileInput.files.length > 0) {
+            fileLabel.textContent = fileInput.files[0].name;
+        } else {
+            fileLabel.textContent = 'Choose Image';
+        }
+    });
+});
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+</body>
+</html>
