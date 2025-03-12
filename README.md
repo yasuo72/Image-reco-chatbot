@@ -11,7 +11,7 @@
 
 *Next-Generation Image Recognition & AI Interaction*
 
-[Demo](https://demo.image-reco-chatbot.com) • [Documentation](https://docs.image-reco-chatbot.com) • [Report Bug](https://github.com/yasuo72/Image-reco-chatbot/issues)
+ • [Documentation](https://docs.image-reco-chatbot.com) • [Report Bug](https://github.com/yasuo72/Image-reco-chatbot/issues)
 
 </div>
 
