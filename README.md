@@ -79,5 +79,5 @@ python chatbot.py
 - 📚 [Documentation](https://docs.image-reco-chatbot.com)
 
 <div align="center">
-<p>Built with ❤️ by the Image-Reco-Chatbot Team</p>
+<p>Built with ❤️ by the Image-Reco-Chatbot by ROHIT</p>
 </div> 
