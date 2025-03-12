@@ -7,7 +7,7 @@
 ![License](https://img.shields.io/badge/license-MIT-purple)
 [![Stars](https://img.shields.io/github/stars/yasuo72/Image-reco-chatbot?style=social)](https://github.com/yasuo72/Image-reco-chatbot/stargazers)
 
-<img src="https://raw.githubusercontent.com/yasuo72/Image-reco-chatbot/main/assets/logo.png" width="200" alt="Logo">
+<img src="https://github.com/yasuo72/assests/blob/main/BUDDY_no_bg.png?raw=true" width="200" alt="Logo">
 
 *Next-Generation Image Recognition & AI Interaction*
 
