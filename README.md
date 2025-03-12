@@ -24,10 +24,10 @@ Transform your image recognition experience with our cutting-edge AI chatbot. Po
 <img src="https://github.com/yasuo72/assests/blob/main/Screenshot%202025-03-12%20213439.png?raw=true" width="600" alt="Dashboard">
 <p><em>Main Dashboard - Real-time Image Analysis</em></p>
 
-<img src="assets/screenshots/chat-interface.png" width="600" alt="Chat Interface">
+<img src="https://github.com/yasuo72/assests/blob/main/Screenshot%202025-03-12%20220432.png?raw=true" width="600" alt="Chat Interface">
 <p><em>Interactive Chat Interface with Image Recognition</em></p>
 
-<img src="assets/screenshots/analysis.png" width="600" alt="Analysis">
+<img src="ahttps://github.com/yasuo72/assests/blob/main/Screenshot%202025-03-12%20220504.png?raw=true" width="600" alt="Analysis">
 <p><em>Detailed Image Analysis Results</em></p>
 </div>
 
