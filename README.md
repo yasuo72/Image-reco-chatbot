@@ -21,7 +21,7 @@ Transform your image recognition experience with our cutting-edge AI chatbot. Po
 ## 📸 Screenshots
 
 <div align="center">
-<img src="assets/screenshots/dashboard.png" width="600" alt="Dashboard">
+<img src="https://github.com/yasuo72/assests/blob/main/Screenshot%202025-03-12%20213439.png?raw=true" width="600" alt="Dashboard">
 <p><em>Main Dashboard - Real-time Image Analysis</em></p>
 
 <img src="assets/screenshots/chat-interface.png" width="600" alt="Chat Interface">
